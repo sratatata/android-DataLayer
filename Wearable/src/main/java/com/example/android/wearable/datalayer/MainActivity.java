@@ -16,8 +16,6 @@
 
 package com.example.android.wearable.datalayer;
 
-import static com.example.android.wearable.datalayer.DataLayerListenerService.LOGD;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -35,9 +33,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.example.android.wearable.datalayer.fragments.AssetFragment;
 import com.example.android.wearable.datalayer.fragments.DataFragment;
 import com.example.android.wearable.datalayer.fragments.DiscoveryFragment;
+import com.example.android.wearable.datalayer.fragments.SendFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -50,7 +48,6 @@ import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -62,6 +59,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static com.example.android.wearable.datalayer.DataLayerListenerService.LOGD;
 
 /**
  * The main activity with a view pager, containing three pages:<p/>
@@ -91,7 +90,7 @@ public class MainActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
     private GridViewPager mPager;
     private DataFragment mDataFragment;
-    private AssetFragment mAssetFragment;
+    private SendFragment mSendFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,20 +149,7 @@ public class MainActivity extends Activity implements
         for (DataEvent event : dataEvents) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 String path = event.getDataItem().getUri().getPath();
-                if (DataLayerListenerService.IMAGE_PATH.equals(path)) {
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    Asset photoAsset = dataMapItem.getDataMap()
-                            .getAsset(DataLayerListenerService.IMAGE_KEY);
-                    // Loads image on background thread.
-                    new LoadBitmapAsyncTask().execute(photoAsset);
-
-                } else if (DataLayerListenerService.COUNT_PATH.equals(path)) {
-                    LOGD(TAG, "Data Changed for COUNT_PATH");
-                    mDataFragment.appendItem("DataItem Changed", event.getDataItem().toString());
-                } else {
-                    LOGD(TAG, "Unrecognized path: " + path);
-                }
-
+                LOGD(TAG, "Unrecognized path: " + path);
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 mDataFragment.appendItem("DataItem Deleted", event.getDataItem().toString());
             } else {
@@ -262,12 +248,16 @@ public class MainActivity extends Activity implements
         dotsPageIndicator.setDotSpacing((int) getResources().getDimension(R.dimen.dots_spacing));
         dotsPageIndicator.setPager(mPager);
         mDataFragment = new DataFragment();
-        mAssetFragment = new AssetFragment();
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
+
+        mSendFragment = new SendFragment();
+
+
         List<Fragment> pages = new ArrayList<>();
         pages.add(mDataFragment);
-        pages.add(mAssetFragment);
         pages.add(discoveryFragment);
+        pages.add(mSendFragment);
+
         final MyPagerAdapter adapter = new MyPagerAdapter(getFragmentManager(), pages);
         mPager.setAdapter(adapter);
     }
@@ -339,7 +329,6 @@ public class MainActivity extends Activity implements
             if (bitmap != null) {
                 LOGD(TAG, "Setting background image on second page..");
                 moveToPage(1);
-                mAssetFragment.setBackgroundImage(bitmap);
             }
         }
     }

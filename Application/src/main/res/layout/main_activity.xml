@@ -18,49 +18,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/take_photo"
-            android:id="@+id/takePhoto"
-            android:onClick="onTakePhotoClick"
-            android:layout_marginLeft="39dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/send_photo"
-            android:id="@+id/sendPhoto"
-            android:layout_alignRight="@+id/takePhoto"
-            android:layout_marginLeft="39dp"
-            android:enabled="false"
-            android:onClick="onSendPhotoClick"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/takePhoto" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_marginLeft="29dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_content_picture" />
-    </RelativeLayout>
-
     <View
         style="@style/Divider"
         android:id="@+id/divider"
-        android:layout_below="@+id/top"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
