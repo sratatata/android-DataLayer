@@ -1,4 +1,15 @@
 
+Before you follow below:
+===================================
+
+* How to start and connect to emulator - [guide][5].
+* DataLayer - [guide][6].
+* Google Play Services version issues - [SOF][7].
+
+[5]: https://developer.android.com/training/wearables/apps/creating.html
+[6]: https://developer.android.com/training/wearables/data-layer/index.html
+[7]: https://stackoverflow.com/questions/44584698/google-play-services-out-of-date-requires-11011000-but-found-10289574
+
 Android DataLayer Sample
 ===================================
 
